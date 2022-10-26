@@ -17,6 +17,7 @@ import torch.backends.cudnn as cudnn
 
 torch.backends.cudnn.benchmark = True
 
+
 def train(opt):
     if not os.path.exists(opt.summary_dir):
         os.makedirs(opt.summary_dir)
@@ -46,7 +47,7 @@ def train(opt):
         else:
             print("=> no checkpoint found at '{}'".format(opt.resume))
     train_dataset = PointcloudPatchDataset(
-        root=opt.trainset,
+        root= opt.trainset,
         shapes_list_file='train.txt',
         patch_radius=0.05,
         seed=opt.manualSeed,
@@ -106,6 +107,8 @@ def train(opt):
 
             torch.save(checpoint_state, '%s/model_full_ae_%d.pth' % (opt.network_model_dir, epoch))
 
+
+
 if __name__ == '__main__':
     parameters = param_utils.parse_arguments()
     parameters.use_cuda = False
@@ -115,6 +118,6 @@ if __name__ == '__main__':
     parameters.batchSize = 64
     parameters.lr = 1e-4
     parameters.workers = 4
-    parameters.nepoch = 50
+    parameters.nepoch = 1
     print(parameters)
     train(parameters)

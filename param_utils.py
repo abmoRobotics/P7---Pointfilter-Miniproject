@@ -9,6 +9,8 @@ def str2bool(v):
         return False
     else:
         raise argparse.ArgumentTypeError('Boolean value expected.')
+
+
 def parse_arguments():
     parser = argparse.ArgumentParser()
     # naming / file handling
@@ -18,7 +20,6 @@ def parse_arguments():
     parser.add_argument('--testset', type=str, default='./Dataset/Test', help='testing set file name')
     parser.add_argument('--save_dir', type=str, default='./Dataset/Results', help='')
     parser.add_argument('--summary_dir', type=str, default='./Summary/Models/Train/logs', help='')
-
     # training parameters
     parser.add_argument('--nepoch', type=int, default=50, help='number of epochs to train for')
     parser.add_argument('--batchSize', type=int, default=32, help='input batch size')
@@ -27,11 +28,9 @@ def parse_arguments():
     parser.add_argument('--start_epoch', type=int, default=0, help='')
     parser.add_argument('--patch_per_shape', type=int, default=8000, help='')
     parser.add_argument('--patch_radius', type=float, default=0.05, help='')
-
     parser.add_argument('--lr', type=float, default=1e-2, help='learning rate')
     parser.add_argument('--momentum', type=float, default=0.9, help='gradient descent momentum')
     parser.add_argument('--model_interval', type=int, default=5, metavar='N', help='how many batches to wait before logging training status')
-
     # others parameters
     parser.add_argument('--resume', type=str, default='', help='refine model at this path')
     parser.add_argument('--support_multiple', type=float, default=4.0, help='the multiple of support radius')
@@ -39,7 +38,6 @@ def parse_arguments():
     parser.add_argument('--gt_normal_mode', type=str, default='nearest', help='')
     parser.add_argument('--repulsion_alpha', type=float, default='0.97', help='')
     parser.add_argument('--use_cuda', type=bool, default='True', help='Setting this false will disable the use of cuda.')
-
     # evaluation parameters
     parser.add_argument('--eval_dir', type=str, default='./Summary/pre_train_model', help='')
     parser.add_argument('--eval_iter_nums', type=int, default=10, help='')

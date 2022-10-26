@@ -5,10 +5,10 @@ import torch.utils.data
 import torch.nn.functional as F
 
 class Encoder(nn.Module):
-    def __init__(self, input_dim=3):#, patch_nums=500, sym_op='max'):
+    def __init__(self, input_dim=3, sym_op='max'):#, patch_nums=500):
         super(Encoder, self).__init__()
         #self.patch_nums = patch_nums
-        #self.sym_op = sym_op
+        self.sym_op = sym_op
         self.input_dim = input_dim
         self.convs = []
         self.conv1 = nn.Conv1d(self.input_dim, 64, kernel_size=1)
@@ -37,8 +37,8 @@ class Encoder(nn.Module):
         self.activate = nn.ReLU()
 
     def forward(self, x):
-        for c, bn in self.convs, self.bns:
-            x = self.activate(bn(c(x)))
+        for c in range(len(self.convs)):
+            x = self.activate(self.bns[c](self.convs[c](x)))
         if self.sym_op == 'sum':
             x = torch.sum(x, dim=-1)
         else:

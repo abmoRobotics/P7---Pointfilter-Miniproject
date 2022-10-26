@@ -7,7 +7,6 @@ import param_utils
 
 
 def eval(opt):
-
     with open(os.path.join(opt.testset, 'test.txt'), 'r') as f:
         shape_names = f.readlines()
     shape_names = [x.strip() for x in shape_names]
@@ -67,11 +66,10 @@ def eval(opt):
 
 
 if __name__ == '__main__':
-
     parameters = param_utils.parse_arguments()
     parameters.use_cuda = False
     parameters.testset = './Dataset/Test'
-    #parameters.eval_dir = './Summary/pre_train_model/'
+    parameters.eval_dir = './Summary/Train/'
     parameters.batchSize = 64
     parameters.workers = 8
     parameters.save_dir = './Dataset/Results/'
