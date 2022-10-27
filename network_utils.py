@@ -22,13 +22,7 @@ def lr_scheduler(optimizer, epoch, init_lr):
 
 def compute_bilateral_loss_with_repulsion(pred_point, gt_patch_pts, gt_patch_normals, support_radius, support_angle, alpha):
     # Our Loss
-    print("Predicted points shape: " + str(pred_point.shape))
     pred_point = pred_point.unsqueeze(1).repeat(1, gt_patch_pts.size(1), 1)
-    print("Predicted points shape after unsqueeze: " + str(pred_point.shape))
-    print("Gt points shape: " + str(gt_patch_pts.shape))
-    print("Support radius: " + str(support_radius.shape))
-    print("Support angle: " + str(support_angle))
-    print("Repulse alpha: " + str(alpha))
     dist_square = ((pred_point - gt_patch_pts) ** 2).sum(2)
     weight_theta = torch.exp(-1 * dist_square / (support_radius ** 2))
     nearest_idx = torch.argmin(dist_square, dim=1)

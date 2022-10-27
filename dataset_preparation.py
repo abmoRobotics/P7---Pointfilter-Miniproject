@@ -2,6 +2,7 @@ import open3d as o3d
 import numpy as np
 import math
 import vis_utils
+import glob
 
 # source for ply models: https://people.sc.fsu.edu/~jburkardt/data/ply/ply.html
 
@@ -18,7 +19,6 @@ def create_pointcloud_from_mesh(mesh_path, nr_samples):
             pi = [bb[i][0], bb[i][1],bb[i][2]]
             pj = [bb[j][0], bb[j][1],bb[j][2]]
             diag = math.dist(pi, pj)
-            print(diag)
             if diag > bb_diag:
                 bb_diag = diag
     return points, bb_diag, normals
@@ -43,12 +43,16 @@ def add_noise_to_cloud(point_cloud, deviation, name, normals, save_cloud=True, a
 
 if __name__ == '__main__':
     enable_vis = False
+    #test = glob.glob("/home/decamargo/Documents/uni/miniproject/models/*")
+    #print(test)
+
     file_path = "Dataset/Train/model_list.txt"
     file1 = open(file_path, 'r')
     lines = file1.readlines()
     for path in lines:
         path = path.replace("\n", "")
         name = path.split(".ply")[0].split("/")[-1]
+        print("Processing: " + name)
         point_cloud, diag, normals = create_pointcloud_from_mesh(path, 100000)
         deviation = list(map(lambda i: i * diag, [0.0, 0.0025, 0.005, 0.01, 0.015, 0.025]))
         for d in deviation:

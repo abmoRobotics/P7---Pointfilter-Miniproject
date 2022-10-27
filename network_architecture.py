@@ -38,7 +38,6 @@ class Encoder(nn.Module):
 
     def forward(self, x):
         op = torch.max if self.sym_op == 'max' else torch.sum
-        print(op)
         for c in range(len(self.conv_layers)):
             x = self.activate(self.bns[c](self.conv_layers[c](x)))
         x = op(x, dim=-1)
