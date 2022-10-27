@@ -26,10 +26,8 @@ class RandomPointcloudPatchSampler(data.sampler.Sampler):
             self.total_patch_count = self.total_patch_count + min(self.patches_per_shape, self.data_source.shape_patch_count[shape_ind])
 
     def __iter__(self):
-
         if self.identical_epochs:
             self.rand.seed(self.seed)
-
         return iter(self.rand.choice(sum(self.data_source.shape_patch_count), size=self.total_patch_count, replace=False))
 
     def __len__(self):
@@ -89,6 +87,7 @@ class PointcloudPatchDataset(data.Dataset):
                 self.shape_patch_count.append(noise_pts.shape[0])
                 bbdiag = float(np.linalg.norm(noise_pts.max(0) - noise_pts.min(0), 2))
                 self.patch_radius_absolute.append(bbdiag * self.patch_radius)
+                print("Patch count: " + str(self.shape_patch_count))
 
 
     def __getitem__(self, index):
@@ -98,16 +97,17 @@ class PointcloudPatchDataset(data.Dataset):
 
         # noise patch
         noise_patch_idx = noise_shape['noise_kdtree'].query_ball_point(noise_shape['noise_pts'][patch_ind], patch_radius)
-
+        # contains list of indices of points inside of the patch radius
         if len(noise_patch_idx) < 3:
             return None
-
+        # what is patch_ind 
         noise_patch_pts  = noise_shape['noise_pts'][noise_patch_idx] - noise_shape['noise_pts'][patch_ind]
         noise_patch_pts, noise_patch_inv = preprocessing_utils.pca_alignment(noise_patch_pts)
         noise_patch_pts /= patch_radius
 
         noise_sample_idx = preprocessing_utils.patch_sampling(noise_patch_pts, self.points_per_patch)
         noise_patch_pts  = noise_patch_pts[noise_sample_idx]
+
 
         support_radius = np.linalg.norm(noise_patch_pts.max(0) - noise_patch_pts.min(0), 2) / noise_patch_pts.shape[0]
         support_radius = np.expand_dims(support_radius, axis=0)

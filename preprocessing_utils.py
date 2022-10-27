@@ -6,9 +6,12 @@ import math
 """Contains utils needed for preprocessing of the point clouds/patches"""
 
 
-def my_collate(batch):
-    batch = list(filter(lambda x : x is not None, batch))
-    return default_collate(batch)
+def custom_collate(batch):
+    new_batch = []
+    for b in batch:
+        if not b == None:
+            new_batch.append(b)
+    return default_collate(new_batch)
 
 
 def get_principle_dirs(pts):

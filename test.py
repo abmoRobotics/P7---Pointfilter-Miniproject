@@ -36,7 +36,10 @@ def eval(opt):
             else:
                 pointfilter_eval = Pointfilternet()
             model_filename = os.path.join(parameters.eval_dir, 'model_full_ae.pth')
-            checkpoint = torch.load(model_filename)
+            if opt.use_cuda:
+                checkpoint = torch.load(model_filename)
+            else:
+                checkpoint = torch.load(model_filename, torch.device('cpu'))
             pointfilter_eval.load_state_dict(checkpoint['state_dict'])
             if opt.use_cuda:
                 pointfilter_eval.cuda()

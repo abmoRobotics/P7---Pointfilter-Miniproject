@@ -61,7 +61,7 @@ def train(opt):
         train_dataset,
         sampler=train_datasampler,
         shuffle=(train_datasampler is None),
-        collate_fn=preprocessing_utils.my_collate,
+        collate_fn=preprocessing_utils.custom_collate,
         batch_size=opt.batchSize,
         num_workers=int(opt.workers),
         pin_memory=True)
