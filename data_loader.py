@@ -4,7 +4,7 @@ import torch.utils.data as data
 import os
 import numpy as np
 import scipy.spatial as sp
-import preprocessing_utils
+from utils import preprocessing_utils
 import re
 
 

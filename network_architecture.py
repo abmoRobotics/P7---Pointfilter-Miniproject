@@ -5,27 +5,25 @@ import torch.utils.data
 import torch.nn.functional as F
 
 class Encoder(nn.Module):
-    def __init__(self, input_dim=3, sym_op='max'):
+    def __init__(self, input_dim=3, sym_op='max',):
         super(Encoder, self).__init__()
         self.sym_op = sym_op
         self.input_dim = input_dim
         self.conv_layers = []
-        self.add_conv_layer(self.input_dim, 64, 1)
-        self.add_conv_layer(64, 128, 1)
-        self.add_conv_layer(128, 256, 1)
-        self.add_conv_layer(256, 512, 1)
-        self.add_conv_layer(512, 1024, 1)
-        self.convs = nn.ModuleList(self.conv_layers)
-        
         self.bns = []
-        self.add_batch_norm1d(64)
-        self.add_batch_norm1d(128)
-        self.add_batch_norm1d(256)
-        self.add_batch_norm1d(512)
-        self.add_batch_norm1d(1024)
-        self.bns_params = nn.ModuleList(self.bns)
 
+        encoder_features = [64,128,256,512,1024]
+
+        in_channels = self.input_dim
+        for feature in encoder_features:
+            self.add_conv_layer(in_channels, feature, 1)
+            self.add_batch_norm1d(feature)
+            in_channels = feature
+
+        self.convs = nn.ModuleList(self.conv_layers)
+        self.bns_params = nn.ModuleList(self.bns)
         self.activate = nn.ReLU()
+        self.out_dim = encoder_features[-1]
 
 
     def add_conv_layer(self, num_input, num_output, kernel_size):
@@ -45,18 +43,23 @@ class Encoder(nn.Module):
 
 
 class Decoder(nn.Module):
-    def __init__(self):
+    def __init__(self, input_dim=1024, out_dim=3):
         super(Decoder, self).__init__()
 
         self.lns = []
-        self.add_linear_transform(1024, 512)
-        self.add_linear_transform(512, 256)
-        self.add_linear_transform(256, 3)
-        self.lns_params = nn.ModuleList(self.lns)
-
         self.bns = []
-        self.add_batch_norm1d(512)
-        self.add_batch_norm1d(256)
+
+        decoder_features = [512,256]
+
+        in_channels = input_dim
+        for feature in decoder_features:
+            self.add_linear_transform(in_channels, feature)
+            self.add_batch_norm1d(feature)
+            in_channels = feature
+
+        self.add_linear_transform(decoder_features[-1], out_dim)
+
+        self.lns_params = nn.ModuleList(self.lns)
         self.bns_params = nn.ModuleList(self.bns)
 
     
@@ -83,7 +86,7 @@ class Pointfilternet(nn.Module):
         self.input_dim = input_dim
 
         self.encoder = Encoder(self.input_dim)
-        self.decoder = Decoder()
+        self.decoder = Decoder(input_dim = self.encoder.out_dim, out_dim = self.input_dim)
 
     def forward(self, x):
         x_encoded = self.encoder(x)

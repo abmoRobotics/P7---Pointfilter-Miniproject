@@ -1,18 +1,18 @@
-import vis_utils
+import utils.vis_utils as vis_utils
 import numpy as np
 
 test_path = "./Dataset/Test/"
 train_path = "./Dataset/Train/"
 res_path = "./Dataset/Results/"
 
-pc_noisy_path = test_path + "sphere_dev1.0938961202360427.npy"
-pc_filtered_path = res_path + "sphere_dev1.0938961202360427_pred_iter_2.npy"
+pc_noisy_path = test_path + "A110.PLY_dev7.85381677924566.npy"
+pc_filtered_path = res_path + "A110.PLY_dev7.85381677924566_pred_iter_0.npy"
 
-pc_input = train_path + "dodge_dev0.0.npy"
-pc_input_noisy = train_path + "dodge_dev0.16997851507465497.npy"
+pc_input = train_path + ".npy"
+pc_input_noisy = train_path + ".npy"
 
-pc_noisy = np.load(pc_input)
-pc_filtered = np.load(pc_input_noisy)
+pc_noisy = np.load(pc_noisy_path)
+pc_filtered = np.load(pc_filtered_path)
 print(pc_noisy)
 print(pc_filtered)
 vis_utils.visualize_np_pointcloud(pc_noisy)

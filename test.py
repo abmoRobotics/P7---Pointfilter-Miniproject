@@ -3,8 +3,8 @@ import torch
 import numpy as np
 from network_architecture import Pointfilternet
 from data_loader import PointcloudPatchDataset
-import param_utils
-import preprocessing_utils
+from utils import param_utils
+from utils import preprocessing_utils
 
 
 def eval(opt):
@@ -73,7 +73,7 @@ def eval(opt):
 
 if __name__ == '__main__':
     parameters = param_utils.parse_arguments()
-    parameters.use_cuda = False
+    parameters.use_cuda = True
     parameters.testset = './Dataset/Test'
     parameters.eval_dir = './Summary/Train/'
     parameters.batchSize = 64

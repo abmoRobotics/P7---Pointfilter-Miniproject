@@ -5,9 +5,9 @@ from __future__ import print_function
 from tensorboardX import SummaryWriter
 from network_architecture import Pointfilternet
 from data_loader import PointcloudPatchDataset, RandomPointcloudPatchSampler
-import preprocessing_utils
-import network_utils
-import param_utils
+from utils import preprocessing_utils
+from utils import network_utils
+from utils import param_utils
 
 import os
 import numpy as np
