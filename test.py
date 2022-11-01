@@ -4,6 +4,7 @@ import numpy as np
 from network_architecture import Pointfilternet
 from data_loader import PointcloudPatchDataset
 import param_utils
+import preprocessing_utils
 
 
 def eval(opt):
@@ -29,7 +30,9 @@ def eval(opt):
             test_dataloader = torch.utils.data.DataLoader(
                 test_dataset,
                 batch_size=opt.batchSize,
-                num_workers=int(opt.workers))
+                num_workers=int(opt.workers),
+                collate_fn=preprocessing_utils.custom_collate
+                )
 
             if opt.use_cuda:
                 pointfilter_eval = Pointfilternet().cuda()
